@@ -15,16 +15,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-demo-nodes-cpp \
     ros-humble-demo-nodes-py \
     git nano iputils-ping net-tools sudo \
-    && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g ${GID} ${USERNAME} 2>/dev/null || true && \
     useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USERNAME} && \
     echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     echo "source /opt/ros/humble/setup.bash" >> /home/${USERNAME}/.bashrc && \
-    echo "[ -f /ws/install/setup.bash ] && source /ws/install/setup.bash" >> /home/${USERNAME}/.bashrc
-
-RUN mkdir -p /ws/src /ws/build /ws/install /ws/log && \
-    chown -R ${USERNAME}:${USERNAME} /ws
+    echo "[ -f /ws/install/setup.bash ] && source /ws/install/setup.bash" 
+	>> /home/${USERNAME}/.bashrc
 
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
